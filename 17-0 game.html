@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>17-0 — Build Your Team. Go Undefeated.</title>
+<style>
+:root{
+  --bg:#0a0e1a; --card:#131b2e; --card2:#1a2440;
+  --line:#243055; --text:#eef2ff; --muted:#8a94b8; --green:#00e676;
+  --gold:#ffb612; --red:#ff4d4d;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);color-scheme:dark;}
+body{margin:0;background:radial-gradient(ellipse at top,#10192f 0%,var(--bg) 60%);
+  color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh;}
+h1,h2,h3{margin:0 0 8px;letter-spacing:.5px}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 60px;}
+.center{text-align:center}
+.logo{font-size:52px;font-weight:900;letter-spacing:2px;
+  background:linear-gradient(180deg,#fff,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 40px rgba(0,230,118,.25);}
+.sub{color:var(--muted);margin-bottom:28px;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+.menu-btn{display:block;width:100%;padding:16px;margin-bottom:12px;border-radius:12px;
+  border:1px solid var(--line);background:linear-gradient(180deg,var(--card2),var(--card));
+  color:var(--text);font-size:16px;font-weight:700;text-align:left;position:relative;}
+.menu-btn:active{transform:scale(.98)}
+.menu-btn .tag{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.menu-btn.primary{background:linear-gradient(180deg,#00c853,#009e46);color:#04210f;border:none;font-size:18px}
+.menu-btn.disabled{opacity:.45;cursor:default}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;}
+.badge-green{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.4)}
+.badge-gold{background:rgba(255,182,18,.15);color:var(--gold);border:1px solid rgba(255,182,18,.4)}
+.progress{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:10px 0 2px;}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--green),var(--gold))}
+.rollzone{text-align:center;padding:30px 10px}
+.rollbtn{padding:20px 30px;border-radius:14px;border:none;font-size:18px;font-weight:900;
+  background:linear-gradient(180deg,var(--gold),#d99500);color:#2a1a00;box-shadow:0 8px 24px rgba(255,182,18,.25)}
+.rollbtn:active{transform:scale(.96)}
+.teamreveal{text-align:center;padding:6px 0 14px}
+.teamreveal .swatch{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.teamreveal .tn{font-size:20px;font-weight:900}
+.teamreveal .hc{color:var(--muted);font-size:12px}
+.candgrid{display:flex;flex-direction:column;gap:8px}
+.candcard{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:left;color:var(--text);font-weight:800;font-size:15px}
+.candcard:active{transform:scale(.98)}
+.candcard .meta{display:block;color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.roster-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.rslot{display:flex;justify-content:space-between;padding:8px 10px;border-radius:8px;background:var(--card2);
+  border:1px solid var(--line);font-size:13px}
+.rslot.empty{opacity:.4;font-style:italic}
+.rslot b{color:var(--gold);width:46px;display:inline-block}
+.btnrow{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{flex:1;min-width:120px;padding:13px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card2);color:var(--text);font-weight:700;font-size:14px}
+.btn.gold{background:linear-gradient(180deg,var(--gold),#d99500);color:#2a1a00;border:none}
+.btn.green{background:linear-gradient(180deg,#00e676,#00a854);color:#04210f;border:none}
+.btn:disabled{opacity:.35}
+.backbtn{background:none;border:none;color:var(--muted);font-size:13px;margin-bottom:10px;padding:6px 0}
+.gamelog{max-height:340px;overflow-y:auto;margin-top:10px;border-top:1px solid var(--line)}
+.glrow{display:flex;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line);font-size:13px}
+.glrow .w{color:var(--green);font-weight:800}
+.glrow .l{color:var(--red);font-weight:800}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.stat{background:var(--card2);border-radius:10px;padding:12px;text-align:center}
+.stat .v{font-size:22px;font-weight:900}
+.stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.searchbar{position:relative;margin:4px 0 12px}
+.searchbar input{width:100%;padding:14px 44px 14px 42px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--text);font-size:16px;font-family:inherit;outline:none;-webkit-appearance:none;appearance:none}
+.searchbar input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,230,118,.15)}
+.searchbar .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.7}
+.searchbar .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:var(--line);color:var(--text);font-size:16px;line-height:1;display:none}
+.searchbar.has .clr{display:block}
+.candcard{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%}
+.candcard .l{min-width:0}
+.candcard .ovr{flex:none;text-align:center;font-size:18px;font-weight:900;color:var(--green);line-height:1}
+.candcard .ovr small{display:block;font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-top:3px}
+.nomatch{text-align:center;color:var(--muted);padding:18px 8px;font-size:14px;background:var(--card2);border:1px dashed var(--line);border-radius:12px}
+.nomatch button{margin-top:10px;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);font-weight:700}
+.slotchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px;justify-content:center}
+.chip{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid var(--line)}
+.chip.open{color:var(--green);border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.1)}
+.chip.done{color:var(--muted);text-decoration:line-through;opacity:.5}
+.rescount{font-size:11px;color:var(--muted);margin:0 2px 8px;text-transform:uppercase;letter-spacing:.5px}
+.coachlist{max-height:440px;overflow-y:auto}
+.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:20px}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<script>
+const TEAMS={Cardinals:"#97233F",Falcons:"#A71930",Ravens:"#241773",Bills:"#00338D",Panthers:"#0085CA",
+Bears:"#0B162A",Bengals:"#FB4F14",Browns:"#FF3C00",Cowboys:"#869397",Broncos:"#002244",Lions:"#0076B6",
+Packers:"#203731",Texans:"#03202F",Colts:"#002C5F",Jaguars:"#006778",Chiefs:"#E31837",Chargers:"#0080C6",
+Raiders:"#A5ACAF",Rams:"#003594",Dolphins:"#008E97",Vikings:"#4F2683",Patriots:"#0a2240",Saints:"#D3BC8D",
+Giants:"#0B2265",Jets:"#125740",Eagles:"#004C54",Steelers:"#FFB612",Seahawks:"#69BE28","49ers":"#AA0000",
+Buccaneers:"#D50A0A",Titans:"#4B92DB",Commanders:"#5A1414"};
+const COACHES={Cardinals:"Mike LaFleur",Falcons:"Kevin Stefanski",Ravens:"Jesse Minter",Bills:"Joe Brady",
+Panthers:"Dave Canales",Bears:"Ben Johnson",Bengals:"Zac Taylor",Browns:"Todd Monken",Cowboys:"Brian Schottenheimer",
+Broncos:"Sean Payton",Lions:"Dan Campbell",Packers:"Matt LaFleur",Texans:"DeMeco Ryans",Colts:"Shane Steichen",
+Jaguars:"Liam Coen",Chiefs:"Andy Reid",Chargers:"Jim Harbaugh",Rams:"Sean McVay",Raiders:"Klint Kubiak",
+Dolphins:"Jeff Hafley",Vikings:"Kevin O'Connell",Patriots:"Mike Vrabel",Saints:"Kellen Moore",
+Giants:"John Harbaugh",Jets:"Aaron Glenn",Eagles:"Nick Sirianni",Steelers:"Mike McCarthy",
+Seahawks:"Mike MacDonald","49ers":"Kyle Shanahan",Buccaneers:"Todd Bowles",Titans:"Robert Saleh",
+Commanders:"Dan Quinn"};
+const HC_RATING={Cardinals:60,Falcons:80,Ravens:66,Bills:64,Panthers:74,Bears:93,Bengals:71,Browns:63,Cowboys:75,
+Broncos:95,Lions:86,Packers:90,Texans:89,Colts:78,Jaguars:85,Chiefs:91,Chargers:88,Raiders:65,Rams:99,Dolphins:61,
+Vikings:84,Patriots:94,Saints:73,Giants:81,Jets:68,Eagles:83,Steelers:79,Seahawks:98,"49ers":96,Buccaneers:70,
+Titans:69,Commanders:76};
+const OL_RATING={Cardinals:60,Falcons:75,Ravens:66,Bills:91,Panthers:72,Bears:87,Bengals:84,Browns:62,Cowboys:65,
+Broncos:94,Lions:83,Packers:81,Texans:85,Colts:92,Jaguars:86,Chiefs:82,Chargers:79,Raiders:67,Rams:88,Dolphins:64,
+Vikings:80,Patriots:77,Saints:71,Giants:70,Jets:69,Eagles:96,Steelers:74,Seahawks:76,"49ers":78,Buccaneers:89,
+Titans:68,Commanders:73};
+const DEF_RATING={Cardinals:73,Falcons:77,Ravens:87,Bills:61,Panthers:66,Bears:69,Bengals:79,Browns:65,Cowboys:62,
+Broncos:89,Lions:83,Packers:81,Texans:94,Colts:60,Jaguars:88,Chiefs:78,Chargers:68,Raiders:74,Rams:71,Dolphins:67,
+Vikings:92,Patriots:75,Saints:63,Giants:76,Jets:82,Eagles:90,Steelers:85,Seahawks:93,"49ers":86,Buccaneers:84,
+Titans:64,Commanders:70};
+const ROUNDS=["QB","RB","RB","WR","WR","TE","HC","OL","DEF"];
+const CATLABEL={QB:"Quarterback",RB:"Running Back",WR:"Wide Receiver",TE:"Tight End",HC:"Head Coach",OL:"Offensive Line",DEF:"Defense"};
+const PLAYERS=[
+["Kyler Murray","Cardinals","QB",83],["James Conner","Cardinals","RB",85],["Marvin Harrison Jr.","Cardinals","WR",88],["Trey McBride","Cardinals","TE",89],
+["Kirk Cousins","Falcons","QB",83],["Bijan Robinson","Falcons","RB",92],["Drake London","Falcons","WR",90],["Kyle Pitts","Falcons","TE",86],
+["Lamar Jackson","Ravens","QB",96],["Derrick Henry","Ravens","RB",93],["Zay Flowers","Ravens","WR",88],["Mark Andrews","Ravens","TE",86],
+["Josh Allen","Bills","QB",97],["James Cook","Bills","RB",89],["D.J. Moore","Bills","WR",88],["Dalton Kincaid","Bills","TE",84],
+["Bryce Young","Panthers","QB",79],["Chuba Hubbard","Panthers","RB",84],["Tetairoa McMillan","Panthers","WR",83],["Tommy Tremble","Panthers","TE",78],
+["Caleb Williams","Bears","QB",85],["D'Andre Swift","Bears","RB",83],["Rome Odunze","Bears","WR",83],["Cole Kmet","Bears","TE",82],
+["Joe Burrow","Bengals","QB",95],["Chase Brown","Bengals","RB",85],["Ja'Marr Chase","Bengals","WR",96],["Mike Gesicki","Bengals","TE",80],
+["Dillon Gabriel","Browns","QB",78],["Quinshon Judkins","Browns","RB",82],["Jerry Jeudy","Browns","WR",84],["David Njoku","Browns","TE",85],
+["Dak Prescott","Cowboys","QB",87],["Javonte Williams","Cowboys","RB",83],["CeeDee Lamb","Cowboys","WR",94],["Jake Ferguson","Cowboys","TE",84],
+["Bo Nix","Broncos","QB",87],["RJ Harvey","Broncos","RB",80],["Courtland Sutton","Broncos","WR",86],["Evan Engram","Broncos","TE",83],
+["Jared Goff","Lions","QB",89],["Jahmyr Gibbs","Lions","RB",91],["Amon-Ra St. Brown","Lions","WR",93],["Sam LaPorta","Lions","TE",87],
+["Jordan Love","Packers","QB",88],["Josh Jacobs","Packers","RB",87],["Christian Watson","Packers","WR",83],["Tucker Kraft","Packers","TE",83],
+["C.J. Stroud","Texans","QB",90],["Joe Mixon","Texans","RB",85],["Nico Collins","Texans","WR",91],["Dalton Schultz","Texans","TE",83],
+["Daniel Jones","Colts","QB",84],["Jonathan Taylor","Colts","RB",90],["Josh Downs","Colts","WR",82],["Tyler Warren","Colts","TE",83],
+["Trevor Lawrence","Jaguars","QB",86],["Travis Etienne Jr.","Jaguars","RB",85],["Brian Thomas Jr.","Jaguars","WR",86],["Brenton Strange","Jaguars","TE",76],
+["Patrick Mahomes","Chiefs","QB",90],["Isiah Pacheco","Chiefs","RB",83],["Xavier Worthy","Chiefs","WR",85],["Travis Kelce","Chiefs","TE",88],
+["Justin Herbert","Chargers","QB",93],["Omarion Hampton","Chargers","RB",83],["Ladd McConkey","Chargers","WR",86],["Will Dissly","Chargers","TE",76],
+["Geno Smith","Raiders","QB",84],["Ashton Jeanty","Raiders","RB",86],["Jakobi Meyers","Raiders","WR",84],["Brock Bowers","Raiders","TE",93],
+["Matthew Stafford","Rams","QB",90],["Kyren Williams","Rams","RB",88],["Puka Nacua","Rams","WR",92],["Tyler Higbee","Rams","TE",78],
+["De'Von Achane","Dolphins","RB",88],["Jaylen Waddle","Dolphins","WR",87],
+["Aaron Jones","Vikings","RB",84],["Justin Jefferson","Vikings","WR",97],["T.J. Hockenson","Vikings","TE",86],
+["Drake Maye","Patriots","QB",89],["Rhamondre Stevenson","Patriots","RB",85],["A.J. Brown","Patriots","WR",93],["Hunter Henry","Patriots","TE",83],
+["Tyler Shough","Saints","QB",76],["Alvin Kamara","Saints","RB",86],["Chris Olave","Saints","WR",85],["Juwan Johnson","Saints","TE",78],
+["Jaxson Dart","Giants","QB",78],["Cam Skattebo","Giants","RB",80],["Malik Nabers","Giants","WR",90],
+["Justin Fields","Jets","QB",82],["Breece Hall","Jets","RB",87],["Garrett Wilson","Jets","WR",90],["Mason Taylor","Jets","TE",76],
+["Jalen Hurts","Eagles","QB",90],["Saquon Barkley","Eagles","RB",96],["DeVonta Smith","Eagles","WR",90],["Dallas Goedert","Eagles","TE",85],
+["Aaron Rodgers","Steelers","QB",85],["Jaylen Warren","Steelers","RB",82],["DK Metcalf","Steelers","WR",90],["Pat Freiermuth","Steelers","TE",83],
+["Sam Darnold","Seahawks","QB",86],["Kenneth Walker III","Seahawks","RB",85],["Jaxon Smith-Njigba","Seahawks","WR",90],
+["Brock Purdy","49ers","QB",88],["Christian McCaffrey","49ers","RB",94],["Ricky Pearsall","49ers","WR",85],["George Kittle","49ers","TE",91],
+["Baker Mayfield","Buccaneers","QB",89],["Bucky Irving","Buccaneers","RB",85],["Mike Evans","Buccaneers","WR",89],["Cade Otton","Buccaneers","TE",80],
+["Cam Ward","Titans","QB",80],["Tyjae Spears","Titans","RB",80],["Calvin Ridley","Titans","WR",84],
+["Jayden Daniels","Commanders","QB",92],["Brian Robinson Jr.","Commanders","RB",82],["Terry McLaurin","Commanders","WR",89],["Zach Ertz","Commanders","TE",79]
+,
+["Trey Benson","Cardinals","RB",79],
+["Emari Demercado","Cardinals","RB",72],
+["Michael Wilson","Cardinals","WR",80],
+["Greg Dortch","Cardinals","WR",74],
+["Tyler Allgeier","Falcons","RB",80],
+["Jase McClellan","Falcons","RB",70],
+["Darnell Mooney","Falcons","WR",79],
+["Ray-Ray McCloud III","Falcons","WR",73],
+["Justice Hill","Ravens","RB",76],
+["Keaton Mitchell","Ravens","RB",76],
+["Rashod Bateman","Ravens","WR",80],
+["Devontez Walker","Ravens","WR",72],
+["Ray Davis","Bills","RB",76],
+["Ty Johnson","Bills","RB",72],
+["Khalil Shakir","Bills","WR",85],
+["Keon Coleman","Bills","WR",80],
+["Rico Dowdle","Panthers","RB",81],
+["Trevor Etienne","Panthers","RB",72],
+["Xavier Legette","Panthers","WR",78],
+["Jalen Coker","Panthers","WR",78],
+["Kyle Monangai","Bears","RB",78],
+["Roschon Johnson","Bears","RB",72],
+["Luther Burden III","Bears","WR",82],
+["Olamide Zaccheaus","Bears","WR",73],
+["Samaje Perine","Bengals","RB",73],
+["Zack Moss","Bengals","RB",75],
+["Tee Higgins","Bengals","WR",89],
+["Andrei Iosivas","Bengals","WR",74],
+["Jerome Ford","Browns","RB",76],
+["Dylan Sampson","Browns","RB",74],
+["Cedric Tillman","Browns","WR",76],
+["Isaiah Bond","Browns","WR",73],
+["Jaydon Blue","Cowboys","RB",74],
+["Miles Sanders","Cowboys","RB",72],
+["George Pickens","Cowboys","WR",89],
+["KaVontae Turpin","Cowboys","WR",76],
+["J.K. Dobbins","Broncos","RB",84],
+["Tyler Badie","Broncos","RB",70],
+["Marvin Mims Jr.","Broncos","WR",79],
+["Troy Franklin","Broncos","WR",79],
+["Sione Vaki","Lions","RB",72],
+["Craig Reynolds","Lions","RB",70],
+["Jameson Williams","Lions","WR",86],
+["Isaac TeSlaa","Lions","WR",72],
+["Emanuel Wilson","Packers","RB",74],
+["MarShawn Lloyd","Packers","RB",73],
+["Jayden Reed","Packers","WR",86],
+["Matthew Golden","Packers","WR",81],
+["Dameon Pierce","Texans","RB",72],
+["Woody Marks","Texans","RB",76],
+["Christian Kirk","Texans","WR",78],
+["Jayden Higgins","Texans","WR",77],
+["Tyler Goodson","Colts","RB",70],
+["DJ Giddens","Colts","RB",74],
+["Michael Pittman Jr.","Colts","WR",87],
+["Alec Pierce","Colts","WR",82],
+["Bhayshul Tuten","Jaguars","RB",76],
+["Tank Bigsby","Jaguars","RB",75],
+["Travis Hunter","Jaguars","WR",85],
+["Parker Washington","Jaguars","WR",75],
+["Kareem Hunt","Chiefs","RB",78],
+["Brashard Smith","Chiefs","RB",72],
+["Rashee Rice","Chiefs","WR",88],
+["Marquise Brown","Chiefs","WR",76],
+["Najee Harris","Chargers","RB",80],
+["Kimani Vidal","Chargers","RB",73],
+["Quentin Johnston","Chargers","WR",82],
+["Keenan Allen","Chargers","WR",80],
+["Raheem Mostert","Raiders","RB",75],
+["Zamir White","Raiders","RB",72],
+["Tre Tucker","Raiders","WR",75],
+["Dont'e Thornton Jr.","Raiders","WR",72],
+["Blake Corum","Rams","RB",76],
+["Jarquez Hunter","Rams","RB",72],
+["Davante Adams","Rams","WR",89],
+["Tutu Atwell","Rams","WR",75],
+["Ollie Gordon II","Dolphins","RB",72],
+["Jaylen Wright","Dolphins","RB",74],
+["Malik Washington","Dolphins","WR",77],
+["Tahj Washington","Dolphins","WR",70],
+["Jordan Mason","Vikings","RB",79],
+["Ty Chandler","Vikings","RB",73],
+["Jordan Addison","Vikings","WR",85],
+["Jalen Nailor","Vikings","WR",76],
+["TreVeyon Henderson","Patriots","RB",84],
+["Antonio Gibson","Patriots","RB",73],
+["Stefon Diggs","Patriots","WR",83],
+["Kayshon Boutte","Patriots","WR",76],
+["Kendre Miller","Saints","RB",74],
+["Devin Neal","Saints","RB",72],
+["Brandin Cooks","Saints","WR",77],
+["Bub Means","Saints","WR",74],
+["Tyrone Tracy Jr.","Giants","RB",77],
+["Devin Singletary","Giants","RB",76],
+["Wan'Dale Robinson","Giants","WR",81],
+["Darius Slayton","Giants","WR",77],
+["Braelon Allen","Jets","RB",76],
+["Isaiah Davis","Jets","RB",73],
+["Josh Reynolds","Jets","WR",73],
+["Adonai Mitchell","Jets","WR",76],
+["Will Shipley","Eagles","RB",72],
+["AJ Dillon","Eagles","RB",72],
+["Jahan Dotson","Eagles","WR",73],
+["Britain Covey","Eagles","WR",70],
+["Kenneth Gainwell","Steelers","RB",76],
+["Kaleb Johnson","Steelers","RB",76],
+["Calvin Austin III","Steelers","WR",76],
+["Roman Wilson","Steelers","WR",72],
+["Zach Charbonnet","Seahawks","RB",81],
+["George Holani","Seahawks","RB",72],
+["Cooper Kupp","Seahawks","WR",85],
+["Rashid Shaheed","Seahawks","WR",80],
+["Isaac Guerendo","49ers","RB",77],
+["Jordan James","49ers","RB",73],
+["Jauan Jennings","49ers","WR",84],
+["Demarcus Robinson","49ers","WR",74],
+["Rachaad White","Buccaneers","RB",77],
+["Sean Tucker","Buccaneers","RB",72],
+["Chris Godwin Jr.","Buccaneers","WR",86],
+["Emeka Egbuka","Buccaneers","WR",84],
+["Tony Pollard","Titans","RB",79],
+["Julius Chestnut","Titans","RB",70],
+["Tyler Lockett","Titans","WR",74],
+["Elic Ayomanor","Titans","WR",76],
+["Jacory Croskey-Merritt","Commanders","RB",78],
+["Austin Ekeler","Commanders","RB",74],
+["Deebo Samuel Sr.","Commanders","WR",82],
+["Noah Brown","Commanders","WR",74]
+,
+["Jacoby Brissett","Cardinals","QB",74],
+["Bam Knight","Cardinals","RB",68],
+["Zay Jones","Cardinals","WR",72],
+["Xavier Weaver","Cardinals","WR",66],
+["Simi Fehoko","Cardinals","WR",64],
+["Elijah Higgins","Cardinals","TE",70],
+["Tip Reiman","Cardinals","TE",66],
+["Travis Vokolek","Cardinals","TE",60],
+["Michael Penix Jr.","Falcons","QB",80],
+["Easton Stick","Falcons","QB",62],
+["Casey Washington","Falcons","WR",68],
+["Dylan Drummond","Falcons","WR",62],
+["Charlie Woerner","Falcons","TE",68],
+["Feleipe Franks","Falcons","TE",60],
+["Cooper Rush","Ravens","QB",72],
+["Rasheen Ali","Ravens","RB",66],
+["Tylan Wallace","Ravens","WR",68],
+["LaJohntay Wester","Ravens","WR",66],
+["Diontae Johnson","Ravens","WR",72],
+["Isaiah Likely","Ravens","TE",80],
+["Charlie Kolar","Ravens","TE",72],
+["Hayden Hurst","Ravens","TE",68],
+["Mitch Trubisky","Bills","QB",72],
+["Mike White","Bills","QB",64],
+["Joshua Palmer","Bills","WR",76],
+["Curtis Samuel","Bills","WR",72],
+["Dawson Knox","Bills","TE",78],
+["Jackson Hawes","Bills","TE",66],
+["Andy Dalton","Panthers","QB",73],
+["Jonathon Brooks","Panthers","RB",72],
+["Raheem Blackshear","Panthers","RB",62],
+["David Moore","Panthers","WR",68],
+["Hunter Renfrow","Panthers","WR",68],
+["Ja'Tavion Sanders","Panthers","TE",74],
+["Mitchell Evans","Panthers","TE",66],
+["Tyson Bagent","Bears","QB",66],
+["Case Keenum","Bears","QB",66],
+["Travis Homer","Bears","RB",66],
+["Brittain Brown","Bears","RB",62],
+["Durham Smythe","Bears","TE",68],
+["Colston Loveland","Bears","TE",80],
+["Stone Smartt","Bears","TE",60],
+["Jake Browning","Bengals","QB",70],
+["Joe Flacco","Bengals","QB",72],
+["Jermaine Burton","Bengals","WR",68],
+["Charlie Jones","Bengals","WR",66],
+["Drew Sample","Bengals","TE",72],
+["Tanner Hudson","Bengals","TE",66],
+["Shedeur Sanders","Browns","QB",72],
+["Deshaun Watson","Browns","QB",70],
+["Pierre Strong Jr.","Browns","RB",66],
+["Jamari Thrash","Browns","WR",68],
+["Harold Fannin Jr.","Browns","TE",80],
+["Jordan Akins","Browns","TE",68],
+["Joe Milton III","Cowboys","QB",70],
+["Will Grier","Cowboys","QB",62],
+["Deuce Vaughn","Cowboys","RB",68],
+["Phil Mafah","Cowboys","RB",64],
+["Ryan Flournoy","Cowboys","WR",68],
+["Jalen Tolbert","Cowboys","WR",73],
+["Luke Schoonmaker","Cowboys","TE",70],
+["Brevyn Spann-Ford","Cowboys","TE",62],
+["Jarrett Stidham","Broncos","QB",70],
+["Audric Estime","Broncos","RB",68],
+["Jaleel McLaughlin","Broncos","RB",72],
+["Devaughn Vele","Broncos","WR",74],
+["Pat Bryant","Broncos","WR",70],
+["Adam Trautman","Broncos","TE",72],
+["Lucas Krull","Broncos","TE",64],
+["Kyle Allen","Lions","QB",62],
+["Hendon Hooker","Lions","QB",66],
+["Tim Patrick","Lions","WR",72],
+["Kalif Raymond","Lions","WR",72],
+["Brock Wright","Lions","TE",70],
+["Shane Zylstra","Lions","TE",62],
+["Malik Willis","Packers","QB",76],
+["Romeo Doubs","Packers","WR",78],
+["Dontayvion Wicks","Packers","WR",76],
+["Savion Williams","Packers","WR",66],
+["Luke Musgrave","Packers","TE",72],
+["Ben Sims","Packers","TE",62],
+["Davis Mills","Texans","QB",70],
+["Jawhar Jordan","Texans","RB",62],
+["Xavier Hutchinson","Texans","WR",70],
+["John Metchie III","Texans","WR",70],
+["Justin Watson","Texans","WR",66],
+["Cade Stover","Texans","TE",68],
+["Brevin Jordan","Texans","TE",66],
+["Irv Smith Jr.","Texans","TE",68],
+["Anthony Richardson","Colts","QB",72],
+["Riley Leonard","Colts","QB",64],
+["Khalil Herbert","Colts","RB",70],
+["Ashton Dulin","Colts","WR",66],
+["Mo Alie-Cox","Colts","TE",70],
+["Drew Ogletree","Colts","TE",66],
+["Kylen Granson","Colts","TE",68],
+["Mac Jones","Jaguars","QB",72],
+["LeQuint Allen Jr.","Jaguars","RB",68],
+["Tim Jones","Jaguars","WR",68],
+["Dyami Brown","Jaguars","WR",70],
+["Hunter Long","Jaguars","TE",66],
+["Quintin Morris","Jaguars","TE",64],
+["Gardner Minshew","Chiefs","QB",73],
+["Chris Oladokun","Chiefs","QB",60],
+["Elijah Mitchell","Chiefs","RB",66],
+["Carson Steele","Chiefs","RB",68],
+["JuJu Smith-Schuster","Chiefs","WR",70],
+["Skyy Moore","Chiefs","WR",68],
+["Tyquan Thornton","Chiefs","WR",66],
+["Noah Gray","Chiefs","TE",74],
+["Jared Wiley","Chiefs","TE",68],
+["Robert Tonyan","Chiefs","TE",68],
+["Trey Lance","Chargers","QB",64],
+["Taylor Heinicke","Chargers","QB",68],
+["Mike Williams","Chargers","WR",72],
+["Tre' Harris","Chargers","WR",76],
+["Derius Davis","Chargers","WR",70],
+["Tyler Conklin","Chargers","TE",70],
+["Oronde Gadsden II","Chargers","TE",72],
+["Kenny Pickett","Raiders","QB",68],
+["Aidan O'Connell","Raiders","QB",68],
+["Jack Bech","Raiders","WR",72],
+["Michael Mayer","Raiders","TE",74],
+["Harrison Bryant","Raiders","TE",66],
+["Ian Thomas","Raiders","TE",64],
+["Jimmy Garoppolo","Rams","QB",70],
+["Stetson Bennett","Rams","QB",62],
+["Cody Schrader","Rams","RB",66],
+["Jordan Whittington","Rams","WR",72],
+["Konata Mumpfield","Rams","WR",68],
+["Colby Parkinson","Rams","TE",74],
+["Davis Allen","Rams","TE",70],
+["Tua Tagovailoa","Dolphins","QB",82],
+["Zach Wilson","Dolphins","QB",64],
+["Quinn Ewers","Dolphins","QB",62],
+["Alexander Mattison","Dolphins","RB",68],
+["Jeff Wilson Jr.","Dolphins","RB",66],
+["Tyreek Hill","Dolphins","WR",84],
+["Erik Ezukanma","Dolphins","WR",62],
+["Julian Hill","Dolphins","TE",70],
+["Greg Dulcich","Dolphins","TE",68],
+["Tanner Conner","Dolphins","TE",62],
+["J.J. McCarthy","Vikings","QB",80],
+["Carson Wentz","Vikings","QB",70],
+["Cam Akers","Vikings","RB",66],
+["Adam Thielen","Vikings","WR",74],
+["Tai Felton","Vikings","WR",66],
+["Josh Oliver","Vikings","TE",74],
+["Ben Yurosek","Vikings","TE",62],
+["Joshua Dobbs","Patriots","QB",68],
+["Ben Wooldridge","Patriots","QB",58],
+["Kendrick Bourne","Patriots","WR",74],
+["DeMario Douglas","Patriots","WR",76],
+["Austin Hooper","Patriots","TE",72],
+["Jaheim Bell","Patriots","TE",62],
+["Spencer Rattler","Saints","QB",70],
+["Jake Haener","Saints","QB",62],
+["Velus Jones Jr.","Saints","RB",60],
+["Mason Tipton","Saints","WR",68],
+["Foster Moreau","Saints","TE",72],
+["Taysom Hill","Saints","TE",74],
+["Russell Wilson","Giants","QB",78],
+["Jameis Winston","Giants","QB",72],
+["Eric Gray","Giants","RB",66],
+["Jalin Hyatt","Giants","WR",72],
+["Gunner Olszewski","Giants","WR",68],
+["Theo Johnson","Giants","TE",72],
+["Daniel Bellinger","Giants","TE",68],
+["Chris Manhertz","Giants","TE",64],
+["Tyrod Taylor","Jets","QB",70],
+["Allen Lazard","Jets","WR",70],
+["Xavier Gipson","Jets","WR",68],
+["Tyler Johnson","Jets","WR",66],
+["Jeremy Ruckert","Jets","TE",68],
+["Tanner McKee","Eagles","QB",70],
+["Dorian Thompson-Robinson","Eagles","QB",62],
+["Grant Calcaterra","Eagles","TE",70],
+["Mason Rudolph","Steelers","QB",70],
+["Skylar Thompson","Steelers","QB",62],
+["Cordarrelle Patterson","Steelers","RB",70],
+["Scotty Miller","Steelers","WR",68],
+["Ben Skowronek","Steelers","WR",68],
+["Robert Woods","Steelers","WR",68],
+["Jonnu Smith","Steelers","TE",78],
+["Darnell Washington","Steelers","TE",76],
+["Drew Lock","Seahawks","QB",68],
+["Jalen Milroe","Seahawks","QB",68],
+["Jake Bobo","Seahawks","WR",70],
+["AJ Barner","Seahawks","TE",76],
+["Elijah Arroyo","Seahawks","TE",66],
+["Jacob Cowing","49ers","WR",68],
+["Kyle Trask","Buccaneers","QB",64],
+["Teddy Bridgewater","Buccaneers","QB",70],
+["Jalen McMillan","Buccaneers","WR",76],
+["Sterling Shepard","Buccaneers","WR",68],
+["Payne Durham","Buccaneers","TE",72],
+["Will Levis","Titans","QB",72],
+["Treylon Burks","Titans","WR",72],
+["Van Jefferson","Titans","WR",68],
+["Chig Okonkwo","Titans","TE",74],
+["Josh Whyle","Titans","TE",66],
+["Gunnar Helm","Titans","TE",66],
+["Marcus Mariota","Commanders","QB",70],
+["Luke McCaffrey","Commanders","WR",74],
+["John Bates","Commanders","TE",70],
+["Ben Sinnott","Commanders","TE",70]
+].map(p=>({n:p[0],t:p[1],p:p[2],o:p[3]}));
+
+const SLOTS=ROUNDS; // 9 fixed roster slots (order is display only; no round has a predetermined position)
+function freshState(){return {screen:"draft",round:0,roster:[],slots:Array(9).fill(null),used:new Set(),rerolls:2,rolledTeam:null,rollCandidates:[],query:"",season:null};}
+let S={screen:"menu",round:0,roster:[],slots:Array(9).fill(null),used:new Set(),rerolls:2,rolledTeam:null,rollCandidates:[],query:"",season:null};
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function swatch(team){return `<span class="swatch" style="background:${TEAMS[team]||'#888'}"></span>`}
+
+function newDraft(){S=freshState();render();}
+function openSlotIndex(pos){return S.slots.findIndex((x,i)=>x===null&&SLOTS[i]===pos);}
+function openCount(pos){return S.slots.filter((x,i)=>x===null&&SLOTS[i]===pos).length;}
+// All options from a team the user may still take: any position whose slot is open, no duplicates.
+function candidatesForTeam(team){
+  const out=[];
+  PLAYERS.forEach(p=>{if(p.t===team&&openCount(p.p)>0&&!S.used.has(p.n))out.push(p);});
+  if(openCount("HC")>0&&COACHES[team]&&!S.used.has(COACHES[team]))out.push({n:COACHES[team],t:team,p:"HC",o:HC_RATING[team]});
+  if(openCount("OL")>0)out.push({n:"Offensive Line",t:team,p:"OL",o:OL_RATING[team],unit:1});
+  if(openCount("DEF")>0)out.push({n:"Defense",t:team,p:"DEF",o:DEF_RATING[team],unit:1});
+  const order={QB:0,RB:1,WR:2,TE:3,HC:4,OL:5,DEF:6};
+  return out.sort((a,b)=>order[a.p]-order[b.p]||b.o-a.o);
+}
+// Only the team is random. Never roll a team with nothing selectable.
+function rollTeam(){
+  const teams=Object.keys(TEAMS).filter(t=>candidatesForTeam(t).length>0);
+  const team=teams[Math.floor(Math.random()*teams.length)];
+  S.rolledTeam=team;S.rollCandidates=candidatesForTeam(team);S.query="";
+  render();
+}
+function pickCandidate(i){
+  const c=S.rollCandidates[i];
+  if(!c)return;
+  const idx=openSlotIndex(c.p);
+  if(idx<0||S.used.has(c.n))return; // slot already filled / duplicate: blocked
+  S.slots[idx]=c;S.roster.push(c);S.used.add(c.n);
+  S.round=S.roster.length;S.rolledTeam=null;S.rollCandidates=[];S.query="";
+  if(S.round>=9)S.screen="summary";
+  render();
+}
+function reroll(){ if(S.rerolls<=0)return; S.rerolls--; rollTeam(); }
+function strength(){
+  const avg=S.roster.reduce((s,p)=>s+p.o,0)/S.roster.length;
+  return avg;
+}
+function simSeason(){
+  const str=strength();
+  const ALL=Object.keys(TEAMS);
+  const opps=shuffle(ALL).slice(0,17);
+  let wins=0,losses=0,pf=0,pa=0;const log=[];
+  opps.forEach(opp=>{
+    const oppStr=75+Math.random()*20;
+    const diff=str-oppStr;
+    const winProb=Math.min(0.92,Math.max(0.08,0.5+diff*0.02));
+    const win=Math.random()<winProb;
+    let ys=Math.max(6,Math.round(14+str/6+(Math.random()*14-7)));
+    let os=Math.max(6,Math.round(14+oppStr/6+(Math.random()*14-7)));
+    if(win && ys<=os) ys=os+Math.ceil(Math.random()*7)+1;
+    if(!win && os<=ys) os=ys+Math.ceil(Math.random()*7)+1;
+    if(win){wins++}else{losses++}
+    pf+=ys;pa+=os;
+    log.push({opp,win,ys,os});
+  });
+  const perfect=wins===17;
+  let best={wins:0,perfect:0};
+  try{const saved=localStorage.getItem('nfl170_best');if(saved)best=JSON.parse(saved);}catch(e){}
+  if(wins>best.wins)best.wins=wins;
+  if(perfect)best.perfect=(best.perfect||0)+1;
+  try{localStorage.setItem('nfl170_best',JSON.stringify(best));}catch(e){}
+  S.season={wins,losses,pf,pa,log,perfect,str:Math.round(str)};
+  S.screen="results";
+  render();
+}
+function leaderboard(){
+  let best={wins:0,perfect:0};
+  try{const saved=localStorage.getItem('nfl170_best');if(saved)best=JSON.parse(saved);}catch(e){}
+  S.screen="leaderboard";S._lb=best;render();
+}
+function goto(scr){S.screen=scr;render();}
+
+function render(){
+  const app=document.getElementById('app');
+  if(S.screen==="menu")return app.innerHTML=menuView();
+  if(S.screen==="howto")return app.innerHTML=howtoView();
+  if(S.screen==="leaderboard")return app.innerHTML=leaderboardView();
+  if(S.screen==="coaches")return app.innerHTML=coachesView();
+  if(S.screen==="draft")return app.innerHTML=draftView();
+  if(S.screen==="summary")return app.innerHTML=summaryView();
+  if(S.screen==="results")return app.innerHTML=resultsView();
+}
+
+function menuView(){
+  return `
+  <div class="center">
+    <div class="logo">17-0</div>
+    <div class="sub">Build Your Team. Go Undefeated.</div>
+  </div>
+  <button class="menu-btn primary" onclick="newDraft()">🏈 Play Game</button>
+  <button class="menu-btn disabled">Daily Challenge<span class="tag">Coming soon</span></button>
+  <button class="menu-btn disabled">Practice Mode<span class="tag">Coming soon</span></button>
+  <button class="menu-btn" onclick="goto('howto')">📋 How to Play</button>
+  <button class="menu-btn" onclick="leaderboard()">🏆 Leaderboard</button>
+  <button class="menu-btn" onclick="goto('coaches')">🧢 Head Coaches</button>
+  <button class="menu-btn disabled">Challenge a Friend<span class="tag">Coming soon</span></button>
+  <div class="foot">All 32 current NFL teams, head coaches, O-lines &amp; defenses · curated snapshot, not a live feed.<br>No real photos/logos used.</div>
+  `;
+}
+function howtoView(){
+  return `<button class="backbtn" onclick="goto('menu')">← Back</button>
+  <div class="panel">
+    <h2>How to Play</h2>
+    <ul>
+      <li>Build a 9-slot roster: QB, RB, RB, WR, WR, TE, HC, OL, DEF. There's no set order — you choose which open slot to fill each pick.</li>
+      <li>Each pick, hit Roll — only the NFL team is random. Then choose any player or unit from that team at a position you haven't filled yet (HC = the team's head coach; OL and DEF = the whole unit). Use the search bar to find someone fast.</li>
+      <li>Ratings stay hidden during the draft. Filled slots and already-drafted players are hidden. Don't like the roll? Use one of your 2 rerolls per draft to roll a new team.</li>
+      <li>After the draft, simulate a 17-game season. Your odds each week depend on roster strength, plus some randomness.</li>
+      <li>Goal: finish 17-0. Even a stacked roster isn't guaranteed a perfect season.</li>
+    </ul>
+  </div>`;
+}
+function leaderboardView(){
+  const b=S._lb||{wins:0,perfect:0};
+  return `<button class="backbtn" onclick="goto('menu')">← Back</button>
+  <div class="panel center">
+    <h2>🏆 Your Records</h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${b.wins}-${17-b.wins}</div><div class="k">Best Record</div></div>
+      <div class="stat"><div class="v">${b.perfect||0}</div><div class="k">17-0 Seasons</div></div>
+    </div>
+    <div class="foot">Stored on this device only.</div>
+  </div>`;
+}
+function coachesView(){
+  const rows=Object.keys(TEAMS).sort().map(t=>`<div class="rslot"><span>${swatch(t)}${t}</span><span>${COACHES[t]} · ${HC_RATING[t]}</span></div>`).join("");
+  return `<button class="backbtn" onclick="goto('menu')">← Back</button>
+  <div class="panel">
+    <h2>🧢 Head Coaches</h2>
+    <div class="coachlist roster-list">${rows}</div>
+    <div class="foot">Ratings reflect recent coaching power rankings — a composite snapshot, not an exact science.</div>
+  </div>`;
+}
+function norm(t){return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[.'’`\-]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();}
+function lev(a,b,max){
+  if(Math.abs(a.length-b.length)>max)return max+1;
+  let prev=Array.from({length:b.length+1},(_,i)=>i);
+  for(let i=1;i<=a.length;i++){
+    const cur=[i];let min=i;
+    for(let j=1;j<=b.length;j++){
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+      if(cur[j]<min)min=cur[j];
+    }
+    if(min>max)return max+1;
+    prev=cur;
+  }
+  return prev[b.length];
+}
+const NICK={pat:"patrick",mike:"michael",chris:"christopher",cj:"cj",dj:"dj",aj:"aj",jr:"jr",tj:"tj",ceedee:"ceedee",deandre:"dandre",saq:"saquon",cmc:"christian mccaffrey",juju:"jujuan"};
+function matchToken(q,tokens){
+  for(const w of tokens){
+    if(w.startsWith(q)||(q.length>=3&&w.includes(q)))return 1;
+  }
+  if(q.length>=4){
+    const max=q.length>=7?2:1;
+    for(const w of tokens){
+      if(lev(q,w.slice(0,Math.min(w.length,q.length+1)),max)<=max||lev(q,w,max)<=max)return 2;
+    }
+  }
+  return 0;
+}
+function searchHaystack(c){
+  let extra="";
+  if(c.p==="HC")extra=" head coach hc";
+  if(c.p==="OL")extra=" offensive line ol oline";
+  if(c.p==="DEF")extra=" defense defence def";
+  if(c.p==="QB")extra=" quarterback";
+  if(c.p==="RB")extra=" running back halfback";
+  if(c.p==="WR")extra=" wide receiver";
+  if(c.p==="TE")extra=" tight end";
+  return norm(c.n+extra);
+}
+function filterCands(){
+  const q=norm(S.query||"");
+  const all=S.rollCandidates.map((c,i)=>({c,i}));
+  if(!q)return all;
+  const qt=q.split(" ").filter(Boolean).map(w=>NICK[w]?norm(NICK[w]):w);
+  const flat=qt.join(" ").split(" ").filter(Boolean);
+  const res=[];
+  all.forEach(({c,i})=>{
+    const hay=searchHaystack(c);
+    const tokens=hay.split(" ");
+    const nospace=hay.replace(/ /g,"");
+    let score=0,ok=true;
+    for(const w of flat){
+      const m=matchToken(w,tokens);
+      if(m)score+=m;
+      else if(nospace.includes(w))score+=1;
+      else{ok=false;break;}
+    }
+    if(ok)res.push({c,i,score});
+  });
+  return res.sort((a,b)=>a.score-b.score);
+}
+function candHTML(){
+  const list=filterCands();
+  if(!list.length){
+    return `<div class="nomatch">No eligible players match “${esc(S.query)}” on the ${S.rolledTeam}.<br>Players at filled positions are hidden.<br><button onclick="clearSearch()">Clear search</button></div>`;
+  }
+  const count=S.query?`<div class="rescount">${list.length} of ${S.rollCandidates.length} match</div>`:`<div class="rescount">${S.rollCandidates.length} eligible options</div>`;
+  return count+`<div class="candgrid">`+list.map(({c,i})=>`<button class="candcard" onclick="pickCandidate(${i})">
+    <span class="l">${esc(c.n)}<span class="meta">${CATLABEL[c.p]}${c.unit?" · Team Unit":""} · ${swatch(c.t)}${c.t}</span></span></button>`).join("")+`</div>`;
+}
+function esc(t){return String(t).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));}
+function onSearch(el){
+  S.query=el.value;
+  document.getElementById("candlist").innerHTML=candHTML();
+  document.getElementById("sbar").classList.toggle("has",!!S.query);
+}
+function clearSearch(){
+  S.query="";
+  const el=document.getElementById("sinput");
+  if(el){el.value="";el.focus();}
+  document.getElementById("candlist").innerHTML=candHTML();
+  document.getElementById("sbar").classList.remove("has");
+}
+function slotTag(idx){
+  const cat=SLOTS[idx];
+  return cat+(SLOTS.filter(p=>p===cat).length>1?(SLOTS.slice(0,idx+1).filter(p=>p===cat).length):"");
+}
+function draftView(){
+  const rosterRows=SLOTS.map((cat,idx)=>{
+    const filled=S.slots[idx];
+    const tag=slotTag(idx);
+    return filled?`<div class="rslot"><span><b>${tag}</b>${esc(filled.n)} · ${swatch(filled.t)}${filled.t}</span></div>`
+      :`<div class="rslot empty"><b>${tag}</b>— open —</div>`;
+  }).join("");
+  const chips=SLOTS.map((cat,idx)=>`<span class="chip ${S.slots[idx]?'done':'open'}">${slotTag(idx)}</span>`).join("");
+  let body;
+  if(!S.rolledTeam){
+    body=`<div class="rollzone">
+      <div class="slotchips">${chips}</div>
+      <div class="pill badge-green" style="margin-bottom:14px">Roll a team, then pick any open position</div><br>
+      <button class="rollbtn" onclick="rollTeam()">🎲 Roll a Team</button>
+    </div>`;
+  }else{
+    const t=S.rolledTeam;
+    body=`<div class="teamreveal">
+      ${swatch(t)}<span class="tn">${t}</span><br><span class="hc">HC ${esc(COACHES[t])}</span>
+    </div>
+    <div class="slotchips">${chips}</div>
+    <div class="searchbar ${S.query?'has':''}" id="sbar">
+      <span class="ico">🔍</span>
+      <input id="sinput" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        placeholder="Search ${t} players…" value="${esc(S.query)}" oninput="onSearch(this)" aria-label="Search players on ${t}">
+      <button class="clr" onclick="clearSearch()" aria-label="Clear search">✕</button>
+    </div>
+    <div id="candlist">${candHTML()}</div>
+    <div class="btnrow">
+      <button class="btn" onclick="reroll()" ${S.rerolls<=0?'disabled':''}>🔄 Reroll (${S.rerolls} left)</button>
+    </div>`;
+  }
+  return `
+  <button class="backbtn" onclick="if(confirm('Quit this draft?'))goto('menu')">← Quit</button>
+  <div class="panel">
+    <div class="row">
+      <span class="pill badge-gold">Pick ${Math.min(S.roster.length+1,9)} / 9</span>
+    </div>
+    <div class="progress"><div style="width:${S.roster.length/9*100}%"></div></div>
+    ${body}
+  </div>
+  <div class="panel">
+    <h3>Your Roster</h3>
+    <div class="roster-list">${rosterRows}</div>
+  </div>`;
+}
+function summaryView(){
+  const rosterRows=S.slots.map((p,idx)=>{
+    const tag=slotTag(idx);
+    return `<div class="rslot"><span><b>${tag}</b>${p.n} · ${swatch(p.t)}${p.t}</span></div>`;
+  }).join("");
+  return `
+  <div class="panel center">
+    <h2>✅ Draft Complete</h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${Math.round(strength())}</div><div class="k">Team Strength</div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Final Roster</h3>
+    <div class="roster-list">${rosterRows}</div>
+    <div class="btnrow">
+      <button class="btn green" onclick="simSeason()">▶ Simulate 17-Game Season</button>
+    </div>
+  </div>`;
+}
+function resultsView(){
+  const r=S.season;
+  const log=r.log.map(g=>`<div class="glrow"><span>vs ${g.opp}</span><span class="${g.win?'w':'l'}">${g.win?'W':'L'} ${g.ys}-${g.os}</span></div>`).join("");
+  const strongest=S.roster.reduce((a,b)=>b.o>a.o?b:a);
+  return `
+  <div class="panel center">
+    <h2>${r.perfect?'🏆 PERFECT SEASON!':'Season Complete'}</h2>
+    <div class="logo" style="font-size:40px">${r.wins}-${r.losses}</div>
+  </div>
+  <div class="panel">
+    <div class="statgrid">
+      <div class="stat"><div class="v">${r.pf}</div><div class="k">Points For</div></div>
+      <div class="stat"><div class="v">${r.pa}</div><div class="k">Points Against</div></div>
+      <div class="stat"><div class="v">${r.str}</div><div class="k">Team Strength</div></div>
+      <div class="stat"><div class="v">${strongest.n}</div><div class="k">Strongest Pick</div></div>
+    </div>
+    <div class="gamelog">${log}</div>
+  </div>
+  <div class="btnrow">
+    <button class="btn gold" onclick="newDraft()">🔁 Draft Again</button>
+    <button class="btn" onclick="goto('menu')">Main Menu</button>
+  </div>`;
+}
+render();
+</script>
+</body>
+</html>
